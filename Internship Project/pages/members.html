@@ -1,0 +1,489 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Members - FitTrack</title>
+    <link rel="stylesheet" href="../css/style.css">
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-firestore-compat.js"></script>
+</head>
+<body>
+    <!-- Header Section -->
+    <header>
+        <div class="header-container">
+            <div class="logo">
+                <span class="logo-icon">💪</span>
+                <span>FitTrack</span>
+            </div>
+            <div class="user-info">
+                <span id="adminName">Admin</span>
+                <button id="logoutBtn" class="btn btn-sm" style="width: auto; background: transparent; color: white;">Logout</button>
+            </div>
+            <button class="mobile-menu-btn" id="mobileMenuBtn">☰</button>
+        </div>
+    </header>
+
+    <!-- Navigation Section -->
+    <nav>
+        <div class="nav-container">
+            <ul class="nav-links" id="navLinks">
+                <li><a href="admin-dashboard.html">Dashboard</a></li>
+                <li><a href="members.html" class="active">Members</a></li>
+                <li><a href="classes.html">Classes</a></li>
+                <li><a href="trainers.html">Trainers</a></li>
+                <li><a href="packages.html">Packages</a></li>
+                <li><a href="reports.html">Reports</a></li>
+                <li><a href="settings.html">Settings</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Main Content Section -->
+    <main>
+        <h1 class="dashboard-title">Members Management</h1>
+        
+        <div class="form-container">
+            <div class="form-row">
+                <div class="form-col">
+                    <div class="form-group">
+                        <label for="searchMember">Search Members</label>
+                        <input type="text" id="searchMember" class="form-control" placeholder="Search by name or email">
+                    </div>
+                </div>
+                <div class="form-col" style="display: flex; align-items: flex-end;">
+                    <button class="btn btn-primary" style="margin-bottom: 1.5rem;" onclick="openModal('addMemberModal')">Add New Member</button>
+                </div>
+            </div>
+        </div>
+        
+        <div class="table-container">
+            <div class="table-header">
+                <h2 class="table-title">All Members</h2>
+                <div class="table-actions">
+                    <select id="filterStatus" class="form-control" style="width: auto;">
+                        <option value="all">All Status</option>
+                        <option value="active">Active</option>
+                        <option value="pending">Pending</option>
+                        <option value="inactive">Inactive</option>
+                    </select>
+                </div>
+            </div>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Email</th>
+                        <th>Phone</th>
+                        <th>Package</th>
+                        <th>Expiry Date</th>
+                        <th>Status</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="membersTable">
+                    <!-- Data will be loaded dynamically -->
+                </tbody>
+            </table>
+        </div>
+    </main>
+    
+    <!-- Add Member Modal -->
+    <div class="modal-overlay" id="addMemberModal">
+        <div class="modal">
+            <div class="modal-header">
+                <h3 class="modal-title">Add New Member</h3>
+                <button class="modal-close" onclick="closeModal('addMemberModal')">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="addMemberForm">
+                    <div class="form-group">
+                        <label for="memberName">Full Name</label>
+                        <input type="text" id="memberName" class="form-control" placeholder="Enter full name" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="memberEmail">Email</label>
+                        <input type="email" id="memberEmail" class="form-control" placeholder="Enter email" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="memberPhone">Phone</label>
+                        <input type="tel" id="memberPhone" class="form-control" placeholder="Enter phone number" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="memberPassword">Password</label>
+                        <input type="password" id="memberPassword" class="form-control" placeholder="Create a password" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="memberPackage">Package</label>
+                        <select id="memberPackage" class="form-control">
+                            <option value="">No Package</option>
+                            <option value="basic">Basic</option>
+                            <option value="standard">Standard</option>
+                            <option value="premium">Premium</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="memberStatus">Status</label>
+                        <select id="memberStatus" class="form-control" required>
+                            <option value="active">Active</option>
+                            <option value="pending">Pending</option>
+                            <option value="inactive">Inactive</option>
+                        </select>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="closeModal('addMemberModal')">Cancel</button>
+                <button class="btn btn-primary" onclick="addMember()">Add Member</button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Edit Member Modal -->
+    <div class="modal-overlay" id="editMemberModal">
+        <div class="modal">
+            <div class="modal-header">
+                <h3 class="modal-title">Edit Member</h3>
+                <button class="modal-close" onclick="closeModal('editMemberModal')">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="editMemberForm">
+                    <input type="hidden" id="editMemberId">
+                    <div class="form-group">
+                        <label for="editMemberName">Full Name</label>
+                        <input type="text" id="editMemberName" class="form-control" placeholder="Enter full name" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="editMemberEmail">Email</label>
+                        <input type="email" id="editMemberEmail" class="form-control" placeholder="Enter email" required readonly>
+                    </div>
+                    <div class="form-group">
+                        <label for="editMemberPhone">Phone</label>
+                        <input type="tel" id="editMemberPhone" class="form-control" placeholder="Enter phone number" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="editMemberPackage">Package</label>
+                        <select id="editMemberPackage" class="form-control">
+                            <option value="">No Package</option>
+                            <option value="basic">Basic</option>
+                            <option value="standard">Standard</option>
+                            <option value="premium">Premium</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="editMemberStatus">Status</label>
+                        <select id="editMemberStatus" class="form-control" required>
+                            <option value="active">Active</option>
+                            <option value="pending">Pending</option>
+                            <option value="inactive">Inactive</option>
+                        </select>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="closeModal('editMemberModal')">Cancel</button>
+                <button class="btn btn-primary" onclick="updateMember()">Update Member</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="../js/firebase-config.js"></script>
+    <script src="../js/main.js"></script>
+    <script>
+        // Check if user is logged in and is admin
+        auth.onAuthStateChanged(user => {
+            if (user) {
+                // Check user role from Firestore
+                db.collection('users').doc(user.uid).get()
+                    .then(doc => {
+                        if (doc.exists) {
+                            const userData = doc.data();
+                            if (userData.role === 'admin') {
+                                // Display admin name
+                                document.getElementById('adminName').textContent = userData.name;
+                                
+                                // Load members data
+                                loadMembers();
+                                
+                                // Set up search and filter functionality
+                                setupSearchAndFilter();
+                            } else {
+                                // Not an admin, redirect to user dashboard
+                                window.location.href = 'user-dashboard.html';
+                            }
+                        } else {
+                            // User document doesn't exist, sign out
+                            auth.signOut();
+                            window.location.href = '../index.html';
+                        }
+                    })
+                    .catch(error => {
+                        console.error("Error getting user data:", error);
+                        showNotification('Error getting user data. Please try again.', 'error');
+                    });
+            } else {
+                // Not logged in, redirect to login page
+                window.location.href = '../index.html';
+            }
+        });
+        
+        // Load members data
+        function loadMembers() {
+            db.collection('users')
+                .where('role', '==', 'user')
+                .get()
+                .then(snapshot => {
+                    const membersTable = document.getElementById('membersTable');
+                    membersTable.innerHTML = '';
+                    
+                    if (snapshot.empty) {
+                        membersTable.innerHTML = `
+                            <tr>
+                                <td colspan="7" style="text-align: center;">No members found.</td>
+                            </tr>
+                        `;
+                        return;
+                    }
+                    
+                    snapshot.forEach(doc => {
+                        const member = doc.data();
+                        const row = document.createElement('tr');
+                        
+                        // Format expiry date
+                        let expiryDate = 'N/A';
+                        if (member.packageEndDate) {
+                            expiryDate = member.packageEndDate.toDate().toLocaleDateString();
+                        }
+                        
+                        // Format status
+                        let statusClass = 'status-active';
+                        if (member.status === 'pending') {
+                            statusClass = 'status-pending';
+                        } else if (member.status === 'inactive') {
+                            statusClass = 'status-inactive';
+                        }
+                        
+                        row.innerHTML = `
+                            <td>${member.name}</td>
+                            <td>${member.email}</td>
+                            <td>${member.phone || 'N/A'}</td>
+                            <td>${member.package || 'No Package'}</td>
+                            <td>${expiryDate}</td>
+                            <td><span class="status ${statusClass}">${member.status || 'Active'}</span></td>
+                            <td>
+                                <button class="action-btn edit" onclick="editMember('${doc.id}')">✏️</button>
+                                <button class="action-btn delete" onclick="deleteMember('${doc.id}')">🗑️</button>
+                            </td>
+                        `;
+                        
+                        membersTable.appendChild(row);
+                    });
+                })
+                .catch(error => {
+                    console.error("Error loading members:", error);
+                    showNotification('Error loading members. Please try again.', 'error');
+                });
+        }
+        
+        // Set up search and filter functionality
+        function setupSearchAndFilter() {
+            const searchInput = document.getElementById('searchMember');
+            const filterStatus = document.getElementById('filterStatus');
+            
+            searchInput.addEventListener('input', filterMembers);
+            filterStatus.addEventListener('change', filterMembers);
+            
+            function filterMembers() {
+                const searchTerm = searchInput.value.toLowerCase();
+                const statusFilter = filterStatus.value;
+                
+                const rows = document.querySelectorAll('#membersTable tr');
+                
+                rows.forEach(row => {
+                    const name = row.cells[0]?.textContent.toLowerCase() || '';
+                    const email = row.cells[1]?.textContent.toLowerCase() || '';
+                    const statusElement = row.querySelector('.status');
+                    const status = statusElement?.textContent.toLowerCase() || '';
+                    
+                    const matchesSearch = name.includes(searchTerm) || email.includes(searchTerm);
+                    const matchesStatus = statusFilter === 'all' || status === statusFilter;
+                    
+                    row.style.display = matchesSearch && matchesStatus ? '' : 'none';
+                });
+            }
+        }
+        
+        // Add new member
+        function addMember() {
+            const name = document.getElementById('memberName').value;
+            const email = document.getElementById('memberEmail').value;
+            const phone = document.getElementById('memberPhone').value;
+            const password = document.getElementById('memberPassword').value;
+            const packageType = document.getElementById('memberPackage').value;
+            const status = document.getElementById('memberStatus').value;
+            
+            if (!name || !email || !phone || !password) {
+                showNotification('Please fill in all required fields.', 'error');
+                return;
+            }
+            
+            showLoading();
+            
+            // Create user with email and password
+            auth.createUserWithEmailAndPassword(email, password)
+                .then(userCredential => {
+                    // Add user to Firestore with user role
+                    return db.collection('users').doc(userCredential.user.uid).set({
+                        name: name,
+                        email: email,
+                        phone: phone,
+                        package: packageType || null,
+                        status: status,
+                        role: 'user',
+                        createdAt: firebase.firestore.FieldValue.serverTimestamp()
+                    });
+                })
+                .then(() => {
+                    hideLoading();
+                    showNotification('Member added successfully!', 'success');
+                    closeModal('addMemberModal');
+                    document.getElementById('addMemberForm').reset();
+                    loadMembers();
+                })
+                .catch(error => {
+                    hideLoading();
+                    console.error("Error adding member:", error);
+                    showNotification('Error adding member: ' + error.message, 'error');
+                });
+        }
+        
+        // Edit member
+        function editMember(memberId) {
+            db.collection('users').doc(memberId).get()
+                .then(doc => {
+                    if (doc.exists) {
+                        const member = doc.data();
+                        
+                        document.getElementById('editMemberId').value = memberId;
+                        document.getElementById('editMemberName').value = member.name;
+                        document.getElementById('editMemberEmail').value = member.email;
+                        document.getElementById('editMemberPhone').value = member.phone || '';
+                        document.getElementById('editMemberPackage').value = member.package || '';
+                        document.getElementById('editMemberStatus').value = member.status || 'active';
+                        
+                        openModal('editMemberModal');
+                    } else {
+                        showNotification('Member not found.', 'error');
+                    }
+                })
+                .catch(error => {
+                    console.error("Error getting member:", error);
+                    showNotification('Error getting member details. Please try again.', 'error');
+                });
+        }
+        
+        // Update member
+        function updateMember() {
+            const memberId = document.getElementById('editMemberId').value;
+            const name = document.getElementById('editMemberName').value;
+            const phone = document.getElementById('editMemberPhone').value;
+            const packageType = document.getElementById('editMemberPackage').value;
+            const status = document.getElementById('editMemberStatus').value;
+            
+            if (!name || !phone) {
+                showNotification('Please fill in all required fields.', 'error');
+                return;
+            }
+            
+            showLoading();
+            
+            db.collection('users').doc(memberId).update({
+                name: name,
+                phone: phone,
+                package: packageType || null,
+                status: status,
+                updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+            })
+            .then(() => {
+                hideLoading();
+                showNotification('Member updated successfully!', 'success');
+                closeModal('editMemberModal');
+                loadMembers();
+            })
+            .catch(error => {
+                hideLoading();
+                console.error("Error updating member:", error);
+                showNotification('Error updating member: ' + error.message, 'error');
+            });
+        }
+        
+        // Delete member
+        function deleteMember(memberId) {
+            if (confirm('Are you sure you want to delete this member? This action cannot be undone.')) {
+                showLoading();
+                
+                db.collection('users').doc(memberId).delete()
+                    .then(() => {
+                        // Also delete any packages associated with this user
+                        return db.collection('packages')
+                            .where('userId', '==', memberId)
+                            .get()
+                            .then(snapshot => {
+                                const batch = db.batch();
+                                snapshot.docs.forEach(doc => {
+                                    batch.delete(doc.ref);
+                                });
+                                return batch.commit();
+                            });
+                    })
+                    .then(() => {
+                        hideLoading();
+                        showNotification('Member deleted successfully!', 'success');
+                        loadMembers();
+                    })
+                    .catch(error => {
+                        hideLoading();
+                        console.error("Error deleting member:", error);
+                        showNotification('Error deleting member: ' + error.message, 'error');
+                    });
+            }
+        }
+        
+        // Helper Functions
+        function showLoading() {
+            const loadingDiv = document.createElement('div');
+            loadingDiv.className = 'loading';
+            loadingDiv.innerHTML = '<div class="loading-spinner"></div>';
+            document.body.appendChild(loadingDiv);
+        }
+
+        function hideLoading() {
+            const loadingDiv = document.querySelector('.loading');
+            if (loadingDiv) {
+                loadingDiv.remove();
+            }
+        }
+
+        function showNotification(message, type) {
+            const notification = document.createElement('div');
+            notification.className = `notification ${type}`;
+            notification.textContent = message;
+            
+            document.body.appendChild(notification);
+            
+            setTimeout(() => {
+                notification.classList.add('show');
+            }, 10);
+            
+            setTimeout(() => {
+                notification.classList.remove('show');
+                setTimeout(() => {
+                    notification.remove();
+                }, 300);
+            }, 3000);
+        }
+    </script>
+</body>
+</html>

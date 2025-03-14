@@ -1,0 +1,696 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Packages - FitTrack</title>
+    <link rel="stylesheet" href="../css/style.css">
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-firestore-compat.js"></script>
+</head>
+<body>
+    <!-- Header Section -->
+    <header>
+        <div class="header-container">
+            <div class="logo">
+                <span class="logo-icon">💪</span>
+                <span>FitTrack</span>
+            </div>
+            <div class="user-info">
+                <span id="adminName">Admin</span>
+                <button id="logoutBtn" class="btn btn-sm" style="width: auto; background: transparent; color: white;">Logout</button>
+            </div>
+            <button class="mobile-menu-btn" id="mobileMenuBtn">☰</button>
+        </div>
+    </header>
+
+    <!-- Navigation Section -->
+    <nav>
+        <div class="nav-container">
+            <ul class="nav-links" id="navLinks">
+                <li><a href="admin-dashboard.html">Dashboard</a></li>
+                <li><a href="members.html">Members</a></li>
+                <li><a href="classes.html">Classes</a></li>
+                <li><a href="trainers.html">Trainers</a></li>
+                <li><a href="packages.html" class="active">Packages</a></li>
+                <li><a href="reports.html">Reports</a></li>
+                <li><a href="settings.html">Settings</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Main Content Section -->
+    <main>
+        <h1 class="dashboard-title">Package Management</h1>
+        
+        <div class="dashboard-stats">
+            <div class="stat-card">
+                <div class="stat-card-header">
+                    <span class="stat-card-title">Basic Packages</span>
+                    <span class="stat-card-icon">📋</span>
+                </div>
+                <div class="stat-card-value" id="basicPackages">0</div>
+                <div class="stat-card-description">Active basic packages</div>
+            </div>
+            
+            <div class="stat-card">
+                <div class="stat-card-header">
+                    <span class="stat-card-title">Standard Packages</span>
+                    <span class="stat-card-icon">📋</span>
+                </div>
+                <div class="stat-card-value" id="standardPackages">0</div>
+                <div class="stat-card-description">Active standard packages</div>
+            </div>
+            
+            <div class="stat-card">
+                <div class="stat-card-header">
+                    <span class="stat-card-title">Premium Packages</span>
+                    <span class="stat-card-icon">📋</span>
+                </div>
+                <div class="stat-card-value" id="premiumPackages">0</div>
+                <div class="stat-card-description">Active premium packages</div>
+            </div>
+            
+            <div class="stat-card">
+                <div class="stat-card-header">
+                    <span class="stat-card-title">Total Revenue</span>
+                    <span class="stat-card-icon">💰</span>
+                </div>
+                <div class="stat-card-value" id="packageRevenue">$0</div>
+                <div class="stat-card-description">From all packages</div>
+            </div>
+        </div>
+        
+        <div class="form-container">
+            <h2 class="form-title">Package Configuration</h2>
+            <p>Configure the available membership packages and their pricing.</p>
+            
+            <form id="packageConfigForm">
+                <div class="form-row">
+                    <div class="form-col">
+                        <h3>Basic Package</h3>
+                        <div class="form-group">
+                            <label for="basicPrice">Monthly Price ($)</label>
+                            <input type="number" id="basicPrice" class="form-control" min="0" step="0.01" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="basicDescription">Description</label>
+                            <textarea id="basicDescription" class="form-control" rows="3" required></textarea>
+                        </div>
+                    </div>
+                    
+                    <div class="form-col">
+                        <h3>Standard Package</h3>
+                        <div class="form-group">
+                            <label for="standardPrice">Monthly Price ($)</label>
+                            <input type="number" id="standardPrice" class="form-control" min="0" step="0.01" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="standardDescription">Description</label>
+                            <textarea id="standardDescription" class="form-control" rows="3" required></textarea>
+                        </div>
+                    </div>
+                    
+                    <div class="form-col">
+                        <h3>Premium Package</h3>
+                        <div class="form-group">
+                            <label for="premiumPrice">Monthly Price ($)</label>
+                            <input type="number" id="premiumPrice" class="form-control" min="0" step="0.01" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="premiumDescription">Description</label>
+                            <textarea id="premiumDescription" class="form-control" rows="3" required></textarea>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-col">
+                        <h3>Discounts</h3>
+                        <div class="form-group">
+                            <label for="discount3Month">3-Month Discount (%)</label>
+                            <input type="number" id="discount3Month" class="form-control" min="0" max="100" required>
+                        </div>
+                    </div>
+                    
+                    <div class="form-col">
+                        <h3>&nbsp;</h3>
+                        <div class="form-group">
+                            <label for="discount6Month">6-Month Discount (%)</label>
+                            <input type="number" id="discount6Month" class="form-control" min="0" max="100" required>
+                        </div>
+                    </div>
+                    
+                    <div class="form-col">
+                        <h3>&nbsp;</h3>
+                        <div class="form-group">
+                            <label for="discount12Month">12-Month Discount (%)</label>
+                            <input type="number" id="discount12Month" class="form-control" min="0" max="100" required>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="form-actions">
+                    <button type="submit" class="btn btn-primary">Save Package Configuration</button>
+                </div>
+            </form>
+        </div>
+        
+        <div class="table-container">
+            <div class="table-header">
+                <h2 class="table-title">Active Member Packages</h2>
+                <div class="table-actions">
+                    <select id="filterPackage" class="form-control" style="width: auto;">
+                        <option value="all">All Packages</option>
+                        <option value="basic">Basic</option>
+                        <option value="standard">Standard</option>
+                        <option value="premium">Premium</option>
+                    </select>
+                </div>
+            </div>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Member Name</th>
+                        <th>Package Type</th>
+                        <th>Start Date</th>
+                        <th>End Date</th>
+                        <th>Duration</th>
+                        <th>Price</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="packagesTable">
+                    <!-- Data will be loaded dynamically -->
+                </tbody>
+            </table>
+        </div>
+    </main>
+    
+    <!-- Edit Package Modal -->
+    <div class="modal-overlay" id="editPackageModal">
+        <div class="modal">
+            <div class="modal-header">
+                <h3 class="modal-title">Edit Member Package</h3>
+                <button class="modal-close" onclick="closeModal('editPackageModal')">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="editPackageForm">
+                    <input type="hidden" id="editPackageId">
+                    <div class="form-group">
+                        <label for="editMemberName">Member Name</label>
+                        <input type="text" id="editMemberName" class="form-control" readonly>
+                    </div>
+                    <div class="form-group">
+                        <label for="editPackageType">Package Type</label>
+                        <select id="editPackageType" class="form-control" required>
+                            <option value="basic">Basic</option>
+                            <option value="standard">Standard</option>
+                            <option value="premium">Premium</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="editStartDate">Start Date</label>
+                        <input type="date" id="editStartDate" class="form-control" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="editDuration">Duration (Months)</label>
+                        <select id="editDuration" class="form-control" required>
+                            <option value="1">1 Month</option>
+                            <option value="3">3 Months</option>
+                            <option value="6">6 Months</option>
+                            <option value="12">12 Months</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="editEndDate">End Date</label>
+                        <input type="date" id="editEndDate" class="form-control" readonly>
+                    </div>
+                    <div class="form-group">
+                        <label for="editPrice">Price ($)</label>
+                        <input type="number" id="editPrice" class="form-control" min="0" step="0.01" required>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="closeModal('editPackageModal')">Cancel</button>
+                <button class="btn btn-primary" onclick="updatePackage()">Update Package</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="../js/firebase-config.js"></script>
+    <script src="../js/main.js"></script>
+    <script>
+        // Check if user is logged in and is admin
+        auth.onAuthStateChanged(user => {
+            if (user) {
+                // Check user role from Firestore
+                db.collection('users').doc(user.uid).get()
+                    .then(doc => {
+                        if (doc.exists) {
+                            const userData = doc.data();
+                            if (userData.role === 'admin') {
+                                // Display admin name
+                                document.getElementById('adminName').textContent = userData.name;
+                                
+                                // Load package configuration
+                                loadPackageConfig();
+                                
+                                // Load package statistics
+                                loadPackageStats();
+                                
+                                // Load active packages
+                                loadActivePackages();
+                                
+                                // Set up filter functionality
+                                setupFilter();
+                            } else {
+                                // Not an admin, redirect to user dashboard
+                                window.location.href = 'user-dashboard.html';
+                            }
+                        } else {
+                            // User document doesn't exist, sign out
+                            auth.signOut();
+                            window.location.href = '../index.html';
+                        }
+                    })
+                    .catch(error => {
+                        console.error("Error getting user data:", error);
+                        showNotification('Error getting user data. Please try again.', 'error');
+                    });
+            } else {
+                // Not logged in, redirect to login page
+                window.location.href = '../index.html';
+            }
+        });
+        
+        // Load package configuration
+        function loadPackageConfig() {
+            db.collection('settings').doc('packages').get()
+                .then(doc => {
+                    if (doc.exists) {
+                        const packageConfig = doc.data();
+                        
+                        // Set form values
+                        document.getElementById('basicPrice').value = packageConfig.basicPrice || 30;
+                        document.getElementById('basicDescription').value = packageConfig.basicDescription || 'Gym access only';
+                        
+                        document.getElementById('standardPrice').value = packageConfig.standardPrice || 50;
+                        document.getElementById('standardDescription').value = packageConfig.standardDescription || 'Gym access + 2 classes per week';
+                        
+                        document.getElementById('premiumPrice').value = packageConfig.premiumPrice || 80;
+                        document.getElementById('premiumDescription').value = packageConfig.premiumDescription || 'Gym access + unlimited classes';
+                        
+                        document.getElementById('discount3Month').value = packageConfig.discount3Month || 5;
+                        document.getElementById('discount6Month').value = packageConfig.discount6Month || 10;
+                        document.getElementById('discount12Month').value = packageConfig.discount12Month || 15;
+                    } else {
+                        // Document doesn't exist, set default values
+                        document.getElementById('basicPrice').value = 30;
+                        document.getElementById('basicDescription').value = 'Gym access only';
+                        
+                        document.getElementById('standardPrice').value = 50;
+                        document.getElementById('standardDescription').value = 'Gym access + 2 classes per week';
+                        
+                        document.getElementById('premiumPrice').value = 80;
+                        document.getElementById('premiumDescription').value = 'Gym access + unlimited classes';
+                        
+                        document.getElementById('discount3Month').value = 5;
+                        document.getElementById('discount6Month').value = 10;
+                        document.getElementById('discount12Month').value = 15;
+                    }
+                })
+                .catch(error => {
+                    console.error("Error loading package configuration:", error);
+                    showNotification('Error loading package configuration. Please try again.', 'error');
+                });
+            
+            // Handle form submission
+            document.getElementById('packageConfigForm').addEventListener('submit', e => {
+                e.preventDefault();
+                
+                const packageConfig = {
+                    basicPrice: parseFloat(document.getElementById('basicPrice').value),
+                    basicDescription: document.getElementById('basicDescription').value,
+                    
+                    standardPrice: parseFloat(document.getElementById('standardPrice').value),
+                    standardDescription: document.getElementById('standardDescription').value,
+                    
+                    premiumPrice: parseFloat(document.getElementById('premiumPrice').value),
+                    premiumDescription: document.getElementById('premiumDescription').value,
+                    
+                    discount3Month: parseInt(document.getElementById('discount3Month').value),
+                    discount6Month: parseInt(document.getElementById('discount6Month').value),
+                    discount12Month: parseInt(document.getElementById('discount12Month').value),
+                    
+                    updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+                };
+                
+                showLoading();
+                
+                db.collection('settings').doc('packages').set(packageConfig)
+                    .then(() => {
+                        hideLoading();
+                        showNotification('Package configuration saved successfully!', 'success');
+                    })
+                    .catch(error => {
+                        hideLoading();
+                        console.error("Error saving package configuration:", error);
+                        showNotification('Error saving package configuration: ' + error.message, 'error');
+                    });
+            });
+        }
+        
+        // Load package statistics
+        function loadPackageStats() {
+            const today = new Date();
+            
+            db.collection('packages')
+                .where('endDate', '>', today)
+                .get()
+                .then(snapshot => {
+                    let basicCount = 0;
+                    let standardCount = 0;
+                    let premiumCount = 0;
+                    let totalRevenue = 0;
+                    
+                    snapshot.forEach(doc => {
+                        const packageData = doc.data();
+                        
+                        // Count by package type
+                        switch (packageData.type) {
+                            case 'basic':
+                                basicCount++;
+                                break;
+                            case 'standard':
+                                standardCount++;
+                                break;
+                            case 'premium':
+                                premiumCount++;
+                                break;
+                        }
+                        
+                        // Add to total revenue
+                        totalRevenue += packageData.price || 0;
+                    });
+                    
+                    // Update stats display
+                    document.getElementById('basicPackages').textContent = basicCount;
+                    document.getElementById('standardPackages').textContent = standardCount;
+                    document.getElementById('premiumPackages').textContent = premiumCount;
+                    document.getElementById('packageRevenue').textContent = '$' + totalRevenue.toFixed(2);
+                })
+                .catch(error => {
+                    console.error("Error loading package statistics:", error);
+                    showNotification('Error loading package statistics. Please try again.', 'error');
+                });
+        }
+        
+        // Load active packages
+        function loadActivePackages() {
+            const today = new Date();
+            
+            db.collection('packages')
+                .where('endDate', '>', today)
+                .get()
+                .then(snapshot => {
+                    const packagesTable = document.getElementById('packagesTable');
+                    packagesTable.innerHTML = '';
+                    
+                    if (snapshot.empty) {
+                        packagesTable.innerHTML = `
+                            <tr>
+                                <td colspan="7" style="text-align: center;">No active packages found.</td>
+                            </tr>
+                        `;
+                        return;
+                    }
+                    
+                    // Get all user IDs from packages
+                    const userIds = snapshot.docs.map(doc => doc.data().userId);
+                    
+                    // Get user data for all users with active packages
+                    return db.collection('users')
+                        .where(firebase.firestore.FieldPath.documentId(), 'in', userIds)
+                        .get()
+                        .then(userSnapshot => {
+                            // Create a map of user IDs to user data
+                            const userMap = {};
+                            userSnapshot.forEach(doc => {
+                                userMap[doc.id] = doc.data();
+                            });
+                            
+                            // Display packages with user data
+                            snapshot.forEach(doc => {
+                                const packageData = doc.data();
+                                const userData = userMap[packageData.userId] || {};
+                                
+                                const row = document.createElement('tr');
+                                
+                                // Format dates
+                                const startDate = packageData.startDate.toDate().toLocaleDateString();
+                                const endDate = packageData.endDate.toDate().toLocaleDateString();
+                                
+                                // Format package type
+                                let packageType = 'Unknown';
+                                switch (packageData.type) {
+                                    case 'basic':
+                                        packageType = 'Basic';
+                                        break;
+                                    case 'standard':
+                                        packageType = 'Standard';
+                                        break;
+                                    case 'premium':
+                                        packageType = 'Premium';
+                                        break;
+                                }
+                                
+                                row.innerHTML = `
+                                    <td>${userData.name || 'Unknown'}</td>
+                                    <td>${packageType}</td>
+                                    <td>${startDate}</td>
+                                    <td>${endDate}</td>
+                                    <td>${packageData.duration} month(s)</td>
+                                    <td>$${packageData.price ? packageData.price.toFixed(2) : '0.00'}</td>
+                                    <td>
+                                        <button class="action-btn edit" onclick="editPackage('${doc.id}')">✏️</button>
+                                        <button class="action-btn delete" onclick="deletePackage('${doc.id}')">🗑️</button>
+                                    </td>
+                                `;
+                                
+                                row.setAttribute('data-package-type', packageData.type);
+                                packagesTable.appendChild(row);
+                            });
+                        });
+                })
+                .catch(error => {
+                    console.error("Error loading active packages:", error);
+                    showNotification('Error loading active packages. Please try again.', 'error');
+                });
+        }
+        
+        // Set up filter functionality
+        function setupFilter() {
+            const filterPackage = document.getElementById('filterPackage');
+            
+            filterPackage.addEventListener('change', () => {
+                const packageType = filterPackage.value;
+                
+                const rows = document.querySelectorAll('#packagesTable tr');
+                
+                rows.forEach(row => {
+                    if (packageType === 'all' || row.getAttribute('data-package-type') === packageType) {
+                        row.style.display = '';
+                    } else {
+                        row.style.display = 'none';
+                    }
+                });
+            });
+        }
+        
+        // Edit package
+        function editPackage(packageId) {
+            db.collection('packages').doc(packageId).get()
+                .then(doc => {
+                    if (doc.exists) {
+                        const packageData = doc.data();
+                        
+                        // Get user data
+                        return db.collection('users').doc(packageData.userId).get()
+                            .then(userDoc => {
+                                const userData = userDoc.exists ? userDoc.data() : {};
+                                
+                                document.getElementById('editPackageId').value = packageId;
+                                document.getElementById('editMemberName').value = userData.name || 'Unknown';
+                                document.getElementById('editPackageType').value = packageData.type || 'basic';
+                                document.getElementById('editStartDate').value = packageData.startDate.toDate().toISOString().split('T')[0];
+                                document.getElementById('editDuration').value = packageData.duration || 1;
+                                document.getElementById('editEndDate').value = packageData.endDate.toDate().toISOString().split('T')[0];
+                                document.getElementById('editPrice').value = packageData.price || 0;
+                                
+                                // Set up end date calculation
+                                const editStartDate = document.getElementById('editStartDate');
+                                const editDuration = document.getElementById('editDuration');
+                                const editEndDate = document.getElementById('editEndDate');
+                                
+                                function calculateEndDate() {
+                                    const startDate = new Date(editStartDate.value);
+                                    const duration = parseInt(editDuration.value);
+                                    
+                                    if (startDate && !isNaN(duration)) {
+                                        const endDate = new Date(startDate);
+                                        endDate.setMonth(endDate.getMonth() + duration);
+                                        editEndDate.value = endDate.toISOString().split('T')[0];
+                                    }
+                                }
+                                
+                                editStartDate.addEventListener('change', calculateEndDate);
+                                editDuration.addEventListener('change', calculateEndDate);
+                                
+                                openModal('editPackageModal');
+                            });
+                    } else {
+                        showNotification('Package not found.', 'error');
+                    }
+                })
+                .catch(error => {
+                    console.error("Error getting package:", error);
+                    showNotification('Error getting package details. Please try again.', 'error');
+                });
+        }
+        
+        // Update package
+        function updatePackage() {
+            const packageId = document.getElementById('editPackageId').value;
+            const packageType = document.getElementById('editPackageType').value;
+            const startDate = new Date(document.getElementById('editStartDate').value);
+            const duration = parseInt(document.getElementById('editDuration').value);
+            const endDate = new Date(document.getElementById('editEndDate').value);
+            const price = parseFloat(document.getElementById('editPrice').value);
+            
+            if (!packageType || isNaN(duration) || isNaN(price)) {
+                showNotification('Please fill in all required fields.', 'error');
+                return;
+            }
+            
+            showLoading();
+            
+            // Get the package to get the user ID
+            db.collection('packages').doc(packageId).get()
+                .then(doc => {
+                    if (doc.exists) {
+                        const packageData = doc.data();
+                        const userId = packageData.userId;
+                        
+                        // Update the package
+                        return db.collection('packages').doc(packageId).update({
+                            type: packageType,
+                            startDate: firebase.firestore.Timestamp.fromDate(startDate),
+                            duration: duration,
+                            endDate: firebase.firestore.Timestamp.fromDate(endDate),
+                            price: price,
+                            updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+                        })
+                        .then(() => {
+                            // Also update the user's package info
+                            return db.collection('users').doc(userId).update({
+                                package: packageType,
+                                packageEndDate: firebase.firestore.Timestamp.fromDate(endDate)
+                            });
+                        });
+                    } else {
+                        throw new Error('Package not found.');
+                    }
+                })
+                .then(() => {
+                    hideLoading();
+                    showNotification('Package updated successfully!', 'success');
+                    closeModal('editPackageModal');
+                    loadActivePackages();
+                    loadPackageStats();
+                })
+                .catch(error => {
+                    hideLoading();
+                    console.error("Error updating package:", error);
+                    showNotification('Error updating package: ' + error.message, 'error');
+                });
+        }
+        
+        // Delete package
+        function deletePackage(packageId) {
+            if (confirm('Are you sure you want to delete this package? This action cannot be undone.')) {
+                showLoading();
+                
+                // Get the package to get the user ID
+                db.collection('packages').doc(packageId).get()
+                    .then(doc => {
+                        if (doc.exists) {
+                            const packageData = doc.data();
+                            const userId = packageData.userId;
+                            
+                            // Delete the package
+                            return db.collection('packages').doc(packageId).delete()
+                                .then(() => {
+                                    // Also update the user's package info
+                                    return db.collection('users').doc(userId).update({
+                                        package: null,
+                                        packageEndDate: null
+                                    });
+                                });
+                        } else {
+                            throw new Error('Package not found.');
+                        }
+                    })
+                    .then(() => {
+                        hideLoading();
+                        showNotification('Package deleted successfully!', 'success');
+                        loadActivePackages();
+                        loadPackageStats();
+                    })
+                    .catch(error => {
+                        hideLoading();
+                        console.error("Error deleting package:", error);
+                        showNotification('Error deleting package: ' + error.message, 'error');
+                    });
+            }
+        }
+        
+        // Helper Functions
+        function showLoading() {
+            const loadingDiv = document.createElement('div');
+            loadingDiv.className = 'loading';
+            loadingDiv.innerHTML = '<div class="loading-spinner"></div>';
+            document.body.appendChild(loadingDiv);
+        }
+
+        function hideLoading() {
+            const loadingDiv = document.querySelector('.loading');
+            if (loadingDiv) {
+                loadingDiv.remove();
+            }
+        }
+
+        function showNotification(message, type) {
+            const notification = document.createElement('div');
+            notification.className = `notification ${type}`;
+            notification.textContent = message;
+            
+            document.body.appendChild(notification);
+            
+            setTimeout(() => {
+                notification.classList.add('show');
+            }, 10);
+            
+            setTimeout(() => {
+                notification.classList.remove('show');
+                setTimeout(() => {
+                    notification.remove();
+                }, 300);
+            }, 3000);
+        }
+    </script>
+</body>
+</html>

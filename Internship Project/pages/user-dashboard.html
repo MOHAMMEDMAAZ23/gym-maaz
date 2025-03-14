@@ -1,0 +1,457 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Member Dashboard - FitTrack</title>
+    <link rel="stylesheet" href="../css/style.css">
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-firestore-compat.js"></script>
+</head>
+<body>
+    <!-- Header Section -->
+    <header>
+        <div class="header-container">
+            <div class="logo">
+                <span class="logo-icon">💪</span>
+                <span>FitTrack</span>
+            </div>
+            <div class="user-info">
+                <span id="userName">Member</span>
+                <button id="logoutBtn" class="btn btn-sm" style="width: auto; background: transparent; color: white;">Logout</button>
+            </div>
+            <button class="mobile-menu-btn" id="mobileMenuBtn">☰</button>
+        </div>
+    </header>
+
+    <!-- Navigation Section -->
+    <nav>
+        <div class="nav-container">
+            <ul class="nav-links" id="navLinks">
+                <li><a href="user-dashboard.html" class="active">Dashboard</a></li>
+                <li><a href="user-classes.html">Classes</a></li>
+                <li><a href="user-packages.html">My Package</a></li>
+                <li><a href="user-profile.html">Profile</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Main Content Section -->
+    <main>
+        <h1 class="dashboard-title">Member Dashboard</h1>
+        
+        <div id="noPackageSection" style="display: none;">
+            <div class="form-container">
+                <h2 class="form-title">Create Your Membership Package</h2>
+                <p>Welcome to FitTrack! To get started, please create your membership package.</p>
+                
+                <form id="packageForm">
+                    <div class="form-row">
+                        <div class="form-col">
+                            <div class="form-group">
+                                <label for="packageType">Package Type</label>
+                                <select id="packageType" class="form-control" required>
+                                    <option value="">Select a package</option>
+                                    <option value="basic">Basic (Gym access only)</option>
+                                    <option value="standard">Standard (Gym + 2 classes/week)</option>
+                                    <option value="premium">Premium (Gym + Unlimited classes)</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-col">
+                            <div class="form-group">
+                                <label for="packageDuration">Duration</label>
+                                <select id="packageDuration" class="form-control" required>
+                                    <option value="">Select duration</option>
+                                    <option value="1">1 Month</option>
+                                    <option value="3">3 Months</option>
+                                    <option value="6">6 Months</option>
+                                    <option value="12">12 Months</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-col">
+                            <div class="form-group">
+                                <label for="startDate">Start Date</label>
+                                <input type="date" id="startDate" class="form-control" required>
+                            </div>
+                        </div>
+                        <div class="form-col">
+                            <div class="form-group">
+                                <label for="endDate">End Date</label>
+                                <input type="date" id="endDate" class="form-control" readonly>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="form-actions">
+                        <button type="submit" class="btn btn-primary">Save Package</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+        
+        <div id="hasPackageSection" style="display: none;">
+            <div class="dashboard-stats">
+                <div class="stat-card">
+                    <div class="stat-card-header">
+                        <span class="stat-card-title">Package Type</span>
+                        <span class="stat-card-icon">📋</span>
+                    </div>
+                    <div class="stat-card-value" id="userPackageType">-</div>
+                    <div class="stat-card-description">Your current membership</div>
+                </div>
+                
+                <div class="stat-card">
+                    <div class="stat-card-header">
+                        <span class="stat-card-title">Expiry Date</span>
+                        <span class="stat-card-icon">📅</span>
+                    </div>
+                    <div class="stat-card-value" id="userPackageExpiry">-</div>
+                    <div class="stat-card-description">Days remaining: <span id="daysRemaining">-</span></div>
+                </div>
+                
+                <div class="stat-card">
+                    <div class="stat-card-header">
+                        <span class="stat-card-title">Classes Attended</span>
+                        <span class="stat-card-icon">🏋️</span>
+                    </div>
+                    <div class="stat-card-value" id="classesAttended">0</div>
+                    <div class="stat-card-description">This month</div>
+                </div>
+                
+                <div class="stat-card">
+                    <div class="stat-card-header">
+                        <span class="stat-card-title">Next Payment</span>
+                        <span class="stat-card-icon">💳</span>
+                    </div>
+                    <div class="stat-card-value" id="nextPayment">-</div>
+                    <div class="stat-card-description">Auto-renewal status</div>
+                </div>
+            </div>
+            
+            <div class="table-container">
+                <div class="table-header">
+                    <h2 class="table-title">Upcoming Classes</h2>
+                    <div class="table-actions">
+                        <button class="btn btn-primary btn-sm" onclick="window.location.href='user-classes.html'">Browse Classes</button>
+                    </div>
+                </div>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Class Name</th>
+                            <th>Trainer</th>
+                            <th>Date</th>
+                            <th>Time</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody id="userClassesTable">
+                        <!-- Data will be loaded dynamically -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </main>
+
+    <script src="../js/firebase-config.js"></script>
+    <script src="../js/main.js"></script>
+    <script>
+        // Check if user is logged in and is a regular user
+        auth.onAuthStateChanged(user => {
+            if (user) {
+                // Check user role from Firestore
+                db.collection('users').doc(user.uid).get()
+                    .then(doc => {
+                        if (doc.exists) {
+                            const userData = doc.data();
+                            if (userData.role === 'user') {
+                                // Display user name
+                                document.getElementById('userName').textContent = userData.name;
+                                
+                                // Check if user has a package
+                                checkUserPackage(user.uid);
+                            } else {
+                                // Not a regular user, redirect to admin dashboard
+                                window.location.href = 'admin-dashboard.html';
+                            }
+                        } else {
+                            // User document doesn't exist, sign out
+                            auth.signOut();
+                            window.location.href = '../index.html';
+                        }
+                    })
+                    .catch(error => {
+                        console.error("Error getting user data:", error);
+                        showNotification('Error getting user data. Please try again.', 'error');
+                    });
+            } else {
+                // Not logged in, redirect to login page
+                window.location.href = '../index.html';
+            }
+        });
+        
+        // Check if user has a package
+        function checkUserPackage(userId) {
+            db.collection('packages').where('userId', '==', userId).get()
+                .then(snapshot => {
+                    if (snapshot.empty) {
+                        // User doesn't have a package, show package creation form
+                        document.getElementById('noPackageSection').style.display = 'block';
+                        document.getElementById('hasPackageSection').style.display = 'none';
+                        
+                        // Set up package form
+                        setupPackageForm(userId);
+                    } else {
+                        // User has a package, show package details
+                        document.getElementById('noPackageSection').style.display = 'none';
+                        document.getElementById('hasPackageSection').style.display = 'block';
+                        
+                        // Display package details
+                        displayPackageDetails(snapshot.docs[0]);
+                        
+                        // Load user's classes
+                        loadUserClasses(userId);
+                    }
+                })
+                .catch(error => {
+                    console.error("Error checking user package:", error);
+                    showNotification('Error checking package details. Please try again.', 'error');
+                });
+        }
+        
+        // Set up package form
+        function setupPackageForm(userId) {
+            const packageForm = document.getElementById('packageForm');
+            const startDateInput = document.getElementById('startDate');
+            const endDateInput = document.getElementById('endDate');
+            const packageDurationSelect = document.getElementById('packageDuration');
+            
+            // Set minimum start date to today
+            const today = new Date();
+            startDateInput.min = today.toISOString().split('T')[0];
+            startDateInput.value = today.toISOString().split('T')[0];
+            
+            // Calculate end date based on duration
+            function calculateEndDate() {
+                const startDate = new Date(startDateInput.value);
+                const duration = parseInt(packageDurationSelect.value);
+                
+                if (startDate && !isNaN(duration)) {
+                    const endDate = new Date(startDate);
+                    endDate.setMonth(endDate.getMonth() + duration);
+                    endDateInput.value = endDate.toISOString().split('T')[0];
+                } else {
+                    endDateInput.value = '';
+                }
+            }
+            
+            // Update end date when start date or duration changes
+            startDateInput.addEventListener('change', calculateEndDate);
+            packageDurationSelect.addEventListener('change', calculateEndDate);
+            
+            // Initial calculation
+            calculateEndDate();
+            
+            // Handle form submission
+            packageForm.addEventListener('submit', e => {
+                e.preventDefault();
+                
+                const packageType = document.getElementById('packageType').value;
+                const packageDuration = parseInt(packageDurationSelect.value);
+                const startDate = new Date(startDateInput.value);
+                const endDate = new Date(endDateInput.value);
+                
+                // Calculate package price based on type and duration
+                let basePrice = 0;
+                switch (packageType) {
+                    case 'basic':
+                        basePrice = 30;
+                        break;
+                    case 'standard':
+                        basePrice = 50;
+                        break;
+                    case 'premium':
+                        basePrice = 80;
+                        break;
+                }
+                
+                // Apply discount for longer durations
+                let discount = 0;
+                switch (packageDuration) {
+                    case 3:
+                        discount = 0.05;
+                        break;
+                    case 6:
+                        discount = 0.1;
+                        break;
+                    case 12:
+                        discount = 0.15;
+                        break;
+                }
+                
+                const totalPrice = basePrice * packageDuration * (1 - discount);
+                
+                // Save package to Firestore
+                db.collection('packages').add({
+                    userId: userId,
+                    type: packageType,
+                    duration: packageDuration,
+                    startDate: firebase.firestore.Timestamp.fromDate(startDate),
+                    endDate: firebase.firestore.Timestamp.fromDate(endDate),
+                    price: totalPrice,
+                    createdAt: firebase.firestore.FieldValue.serverTimestamp()
+                })
+                .then(() => {
+                    showNotification('Package created successfully!', 'success');
+                    
+                    // Update user document with package info
+                    return db.collection('users').doc(userId).update({
+                        package: packageType,
+                        packageEndDate: firebase.firestore.Timestamp.fromDate(endDate)
+                    });
+                })
+                .then(() => {
+                    // Refresh the page to show package details
+                    window.location.reload();
+                })
+                .catch(error => {
+                    console.error("Error creating package:", error);
+                    showNotification('Error creating package: ' + error.message, 'error');
+                });
+            });
+        }
+        
+        // Display package details
+        function displayPackageDetails(packageDoc) {
+            const packageData = packageDoc.data();
+            
+            // Format package type for display
+            let packageTypeDisplay = 'Unknown';
+            switch (packageData.type) {
+                case 'basic':
+                    packageTypeDisplay = 'Basic';
+                    break;
+                case 'standard':
+                    packageTypeDisplay = 'Standard';
+                    break;
+                case 'premium':
+                    packageTypeDisplay = 'Premium';
+                    break;
+            }
+            
+            // Display package type
+            document.getElementById('userPackageType').textContent = packageTypeDisplay;
+            
+            // Display expiry date
+            const expiryDate = packageData.endDate.toDate();
+            document.getElementById('userPackageExpiry').textContent = expiryDate.toLocaleDateString();
+            
+            // Calculate days remaining
+            const today = new Date();
+            const daysRemaining = Math.ceil((expiryDate - today) / (1000 * 60 * 60 * 24));
+            document.getElementById('daysRemaining').textContent = daysRemaining;
+            
+            // Display next payment
+            const nextPaymentDate = new Date(expiryDate);
+            nextPaymentDate.setDate(nextPaymentDate.getDate() + 1);
+            document.getElementById('nextPayment').textContent = nextPaymentDate.toLocaleDateString();
+        }
+        
+        // Load user's classes
+        function loadUserClasses(userId) {
+            db.collection('enrollments')
+                .where('userId', '==', userId)
+                .get()
+                .then(snapshot => {
+                    if (snapshot.empty) {
+                        // No classes enrolled
+                        document.getElementById('userClassesTable').innerHTML = `
+                            <tr>
+                                <td colspan="5" style="text-align: center;">You haven't enrolled in any classes yet.</td>
+                            </tr>
+                        `;
+                        return;
+                    }
+                    
+                    // Get class IDs from enrollments
+                    const classIds = snapshot.docs.map(doc => doc.data().classId);
+                    
+                    // Get class details
+                    return db.collection('classes')
+                        .where(firebase.firestore.FieldPath.documentId(), 'in', classIds)
+                        .get();
+                })
+                .then(snapshot => {
+                    if (snapshot && !snapshot.empty) {
+                        const userClassesTable = document.getElementById('userClassesTable');
+                        userClassesTable.innerHTML = '';
+                        
+                        // Count attended classes this month
+                        const today = new Date();
+                        const firstDayOfMonth = new Date(today.getFullYear(), today.getMonth(), 1);
+                        let attendedCount = 0;
+                        
+                        snapshot.docs.forEach(doc => {
+                            const classData = doc.data();
+                            const classDate = new Date(classData.date);
+                            
+                            // Check if class is in the past and this month
+                            if (classDate < today && classDate >= firstDayOfMonth) {
+                                attendedCount++;
+                            }
+                            
+                            // Only show upcoming classes in the table
+                            if (classDate >= today) {
+                                const row = document.createElement('tr');
+                                
+                                row.innerHTML = `
+                                    <td>${classData.name}</td>
+                                    <td>${classData.trainer}</td>
+                                    <td>${classData.date}</td>
+                                    <td>${classData.time}</td>
+                                    <td><span class="status status-active">Enrolled</span></td>
+                                `;
+                                
+                                userClassesTable.appendChild(row);
+                            }
+                        });
+                        
+                        // Update attended classes count
+                        document.getElementById('classesAttended').textContent = attendedCount;
+                    }
+                })
+                .catch(error => {
+                    console.error("Error loading user classes:", error);
+                    showNotification('Error loading classes. Please try again.', 'error');
+                });
+        }
+        
+        // Helper function for notifications
+        function showNotification(message, type) {
+            const notification = document.createElement('div');
+            notification.className = `notification ${type}`;
+            notification.textContent = message;
+            
+            document.body.appendChild(notification);
+            
+            setTimeout(() => {
+                notification.classList.add('show');
+            }, 10);
+            
+            setTimeout(() => {
+                notification.classList.remove('show');
+                setTimeout(() => {
+                    notification.remove();
+                }, 300);
+            }, 3000);
+        }
+    </script>
+</body>
+</html>
