@@ -1,7 +1,8 @@
 // Import Firebase modules (replace with your actual Firebase config)
+// Import Firebase modules (replace with your actual Firebase config)
 import { initializeApp } from "https://www.gstatic.com/firebasejs/9.15.0/firebase-app.js";
 import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/9.15.0/firebase-auth.js";
-import { getFirestore, collection, doc, setDoc, getDoc, FieldValue } from "https://www.gstatic.com/firebasejs/9.15.0/firebase-firestore.js";
+import { getFirestore, doc, setDoc, getDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/9.15.0/firebase-firestore.js";
 
 // Firebase configuration (replace with your actual config)
 const firebaseConfig = {
@@ -17,11 +18,6 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db = getFirestore(app);
-const firebase = {
-    firestore: {
-        FieldValue: FieldValue
-    }
-}
 
 // DOM Elements
 const adminLoginForm = document.getElementById('admin-login');
@@ -30,13 +26,13 @@ const userLoginForm = document.getElementById('user-login');
 const userSignupForm = document.getElementById('user-signup');
 
 // Check if user is already logged in
-auth.onAuthStateChanged(user => {
+onAuthStateChanged(auth, user => {
     if (user) {
         // Check user role from Firestore
-        db.collection('users').doc(user.uid).get()
-            .then(doc => {
-                if (doc.exists) {
-                    const userData = doc.data();
+        getDoc(doc(db, 'users', user.uid))
+            .then(docSnap => {
+                if (docSnap.exists()) {
+                    const userData = docSnap.data();
                     if (userData.role === 'admin') {
                         window.location.href = 'pages/admin-dashboard.html';
                     } else {
@@ -62,16 +58,16 @@ if (adminLoginForm) {
         showLoading();
 
         // Sign in with email and password
-        auth.signInWithEmailAndPassword(email, password)
+        signInWithEmailAndPassword(auth, email, password)
             .then(userCredential => {
                 // Check if user is admin
-                return db.collection('users').doc(userCredential.user.uid).get();
+                return getDoc(doc(db, 'users', userCredential.user.uid));
             })
-            .then(doc => {
-                if (doc.exists && doc.data().role === 'admin') {
+            .then(docSnap => {
+                if (docSnap.exists() && docSnap.data().role === 'admin') {
                     window.location.href = 'pages/admin-dashboard.html';
                 } else {
-                    auth.signOut();
+                    signOut(auth);
                     hideLoading();
                     showNotification('Access denied. You are not an admin.', 'error');
                 }
@@ -84,88 +80,56 @@ if (adminLoginForm) {
     });
 }
 
-// // Admin Signup
-// if (adminSignupForm) {
-//     adminSignupForm.addEventListener('submit', e => {
-//         e.preventDefault();
+// Admin Signup
+if (adminSignupForm) {
+    adminSignupForm.addEventListener('submit', e => {
+        e.preventDefault();
 
-//         const name = document.getElementById('admin-name').value;
-//         const email = document.getElementById('admin-signup-email').value;
-//         const password = document.getElementById('admin-signup-password').value;
-//         const confirmPassword = document.getElementById('admin-confirm-password').value;
-//         const adminCode = document.getElementById('admin-code').value;
+        const name = document.getElementById('admin-name').value;
+        const email = document.getElementById('admin-signup-email').value;
+        const password = document.getElementById('admin-signup-password').value;
+        const confirmPassword = document.getElementById('admin-confirm-password').value;
+        const adminCode = document.getElementById('admin-code').value;
 
-//         // Check if passwords match
-//         if (password !== confirmPassword) {
-//             showNotification('Passwords do not match!', 'error');
-//             return;
-//         }
+        // Check if passwords match
+        if (password !== confirmPassword) {
+            showNotification('Passwords do not match!', 'error');
+            return;
+        }
 
-//         // Check admin code (in a real app, this would be verified against a secure value)
-//         if (adminCode !== 'ADMIN123') {
-//             showNotification('Invalid admin code!', 'error');
-//             return;
-//         }
+        // Check admin code
+        if (adminCode !== 'ADMIN123') {
+            showNotification('Invalid admin code!', 'error');
+            return;
+        }
 
-//         showLoading();
+        showLoading();
 
-//         // Create user with email and password
-//         auth.createUserWithEmailAndPassword(email, password)
-//             .then(userCredential => {
-//                 // Add user to Firestore with admin role
-//                 return db.collection('users').doc(userCredential.user.uid).set({
-//                     name: name,
-//                     email: email,
-//                     role: 'admin',
-//                     createdAt: firebase.firestore.FieldValue.serverTimestamp()
-//                 });
-//             })
-//             .then(() => {
-//                 hideLoading();
-//                 showNotification('Admin account created successfully!', 'success');
-//                 window.location.href = './pages/admin-dashboard.html';
-//             })
-//             .catch(error => {
-//                 hideLoading();
-//                 console.error("Admin signup error:", error);
-//                 showNotification('Signup failed: ' + error.message, 'error');
-//             });
-//     });
-// }
-const buttonadmin = document.getElementById('btn btn-secondary');
-buttonadmin.addEventListener('click', function (event) {
-    event.preventDefault();
-    const name = document.getElementById('admin-name').value;
-    const email = document.getElementById('admin-signup-email').value;
-    const password = document.getElementById('admin-signup-password').value;
-    const confirmPassword = document.getElementById('admin-confirm-password').value;
-    const adminCode = document.getElementById('admin-code').value;
+        // Create user with email and password
+        createUserWithEmailAndPassword(auth, email, password)
+            .then(userCredential => {
+                const user = userCredential.user;
 
-    createUserWithEmailAndPassword(auth, email, password)
-  .then((userCredential) => {
-    // Signed up 
-    const user = userCredential.user;
-    // ...
-    window.location.href = '.pages/admin-dashboard.html';
-  })
-  .catch((error) => {
-    const errorCode = error.code;
-    const errorMessage = error.message;
-    // ..
-  });
-   
-});
-
-
-
-
-
-
-
-
-
-
-
+                // Add user to Firestore with admin role
+                return setDoc(doc(db, 'users', user.uid), {
+                    name: name,
+                    email: email,
+                    role: 'admin',
+                    createdAt: serverTimestamp() // Firestore timestamp
+                });
+            })
+            .then(() => {
+                hideLoading();
+                showNotification('Admin account created successfully!', 'success');
+                window.location.href = 'pages/admin-dashboard.html'; // Redirect to admin dashboard
+            })
+            .catch(error => {
+                hideLoading();
+                console.error("Admin signup error:", error);
+                showNotification('Signup failed: ' + error.message, 'error');
+            });
+    });
+}
 
 // User Login
 if (userLoginForm) {
@@ -178,16 +142,16 @@ if (userLoginForm) {
         showLoading();
 
         // Sign in with email and password
-        auth.signInWithEmailAndPassword(email, password)
+        signInWithEmailAndPassword(auth, email, password)
             .then(userCredential => {
                 // Check if user is a regular user
-                return db.collection('users').doc(userCredential.user.uid).get();
+                return getDoc(doc(db, 'users', userCredential.user.uid));
             })
-            .then(doc => {
-                if (doc.exists && doc.data().role === 'user') {
+            .then(docSnap => {
+                if (docSnap.exists() && docSnap.data().role === 'user') {
                     window.location.href = 'pages/user-dashboard.html';
                 } else {
-                    auth.signOut();
+                    signOut(auth);
                     hideLoading();
                     showNotification('Invalid user credentials.', 'error');
                 }
@@ -220,15 +184,17 @@ if (userSignupForm) {
         showLoading();
 
         // Create user with email and password
-        auth.createUserWithEmailAndPassword(email, password)
+        createUserWithEmailAndPassword(auth, email, password)
             .then(userCredential => {
+                const user = userCredential.user;
+
                 // Add user to Firestore with user role
-                return db.collection('users').doc(userCredential.user.uid).set({
+                return setDoc(doc(db, 'users', user.uid), {
                     name: name,
                     email: email,
                     phone: phone,
                     role: 'user',
-                    createdAt: firebase.firestore.FieldValue.serverTimestamp()
+                    createdAt: serverTimestamp() // Firestore timestamp
                 });
             })
             .then(() => {
