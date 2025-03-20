@@ -1,12 +1,12 @@
 **NOTE:-**
-install node.js
-and following packages to run on your local computer
-npm init -y
-npm install express mongoose bcryptjs jsonwebtoken dotenv cors
+install node.js<br>
+and following packages to run on your local computer<br>
+npm init -y<br>
+npm install express mongoose bcryptjs jsonwebtoken dotenv cors<br>
 
-make changes in css and host using vercel
+make changes in css and host using vercel<br>
 
-#Create .env file
+#Create .env file<br>
 MONGO_URI=  YOUR_MONGODB_URI<br>
 PORT=PORT_NUMBER(EX:5000)<br>
 JWT_SECRET=YOUR_JW_TOKEN<br>
