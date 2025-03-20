@@ -7,9 +7,9 @@ npm install express mongoose bcryptjs jsonwebtoken dotenv cors
 make changes in css and host using vercel
 
 #Create .env file
-MONGO_URI=  YOUR_MONGODB_URI
-PORT=PORT_NUMBER(EX:5000)
-JWT_SECRET=YOUR_JW_TOKEN
+MONGO_URI=  YOUR_MONGODB_URI<br>
+PORT=PORT_NUMBER(EX:5000)<br>
+JWT_SECRET=YOUR_JW_TOKEN<br>
 
 
 # 🏋️‍♂️ Gym Management System  
