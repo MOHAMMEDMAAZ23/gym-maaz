@@ -35,7 +35,7 @@ The **Gym Management System** is a web-based platform designed to **simplify** g
 
 ## 🎨 **Tech Stack**  
 - **Frontend**: HTML, CSS, JavaScript  
-- **Backend**: Firebase (Authentication & Database)  
+- **Backend**: node express MongoDB (Authentication & Database)  
 - **Libraries**:  
   - [Font Awesome](https://fontawesome.com/) (Icons)  
   - [jspdf](https://github.com/parallax/jsPDF) (PDF Generation)  
