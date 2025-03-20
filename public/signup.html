@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Signup</title>
+    <link rel="stylesheet" href="./css/style.css">
+</head>
+<body>
+     <!-- Video Background -->
+     <div class="signup-video-container">
+        <video autoplay loop muted playsinline>
+            <source src="video2.mp4" type="video/mp4">
+            Your browser does not support the video tag.
+        </video>
+    </div>
+    <div class="container">
+        <h2><i class="fas fa-user-plus"></i> Signup</h2>
+        <form id="signupForm">
+            <div class="input-group">
+                <i class="fas fa-user"></i>
+                <input type="text" id="name" placeholder="Full Name" autocomplete="name" required />
+            </div>
+            <div class="input-group">
+                <i class="fas fa-envelope"></i>
+                <input type="email" id="email" placeholder="Email Address" autocomplete="email" required />
+            </div>
+            <div class="input-group">
+                <i class="fas fa-lock"></i>
+                <input type="password" id="password" placeholder="Password" autocomplete="new-password" required />
+            </div>
+            <div class="input-group">
+                <i class="fas fa-user-tag"></i>
+                <select id="role">
+                    <option value="user">User</option>
+                    <option value="admin">Admin</option>
+                </select>
+            </div>
+            <button type="submit">Signup</button>
+        </form>
+        <p>Already have an account? <a href="login.html">Login here </a> <a href="index.html">Home</a></p>
+    </div>
+    <script src="../script.js"></script>    
+</body>
+</html>

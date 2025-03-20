@@ -1,0 +1,1006 @@
+/* Import Google Fonts & Icons */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&family=Pacifico&display=swap');
+@import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css');
+
+/* General Styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Poppins', sans-serif;
+    scroll-behavior: smooth;
+}
+
+/* Full-page styling */
+body {
+    background: linear-gradient(to right, #000000, #212a39);
+    color: white;
+    min-height: 100vh;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+/* Scrollbar */
+body::-webkit-scrollbar {
+    width: 8px;
+}
+
+body::-webkit-scrollbar-track {
+    background: rgba(255, 255, 255, 0.2);
+}
+
+body::-webkit-scrollbar-thumb {
+    background: #ff9800;
+    border-radius: 10px;
+}
+
+/* Header */
+header {
+    background: rgba(255, 255, 255, 0.15);
+    backdrop-filter: blur(10px);
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    width: 100%;
+    padding: 15px 20px;
+    text-align: center;
+    font-size: 1.8rem;
+    font-weight: bold;
+    box-shadow: 0px 4px 10px rgba(255, 255, 255, 0.2);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 1000;
+}
+
+/* Navbar */
+.navbar {
+    display: flex;
+    gap: 20px;
+    margin-left: 20px;
+}
+
+.navbar a {
+    color: white;
+    text-decoration: none;
+    font-size: 1rem;
+    font-weight: 600;
+    transition: 0.3s;
+}
+
+.navbar a:hover {
+    color: #ff9800;
+}
+
+/* Buttons on the right */
+.auth-buttons {
+    display: flex;
+    gap: 15px;
+}
+
+.auth-buttons .btn {
+    padding: 12px 18px;
+    background: white;
+    color: black;
+    font-size: 1rem;
+    border-radius: 8px;
+    text-decoration: none;
+    font-weight: 600;
+    border: 2px solid white;
+    transition: all 0.3s;
+}
+
+.auth-buttons .btn:hover {
+    background: transparent;
+    color: white;
+    border: 2px solid white;
+    transform: scale(1.1);
+}
+
+/* Main Content */
+main {
+    margin-top: 100px;
+    padding: 20px;
+    text-align: center;
+    width: 90%;
+    max-width: 800px;
+}
+
+/* Plan Cards */
+.plan-container {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    margin-top: 30px;
+    flex-wrap: wrap;
+}
+
+.plan-card {
+    background: rgba(255, 255, 255, 0.2);
+    backdrop-filter: blur(10px);
+    padding: 20px;
+    border-radius: 15px;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.3);
+    width: 250px;
+    text-align: center;
+    transition: 0.3s;
+    font-family: 'Pacifico', cursive;
+}
+
+.plan-card:hover {
+    transform: scale(1.05);
+    background: rgba(255, 255, 255, 0.3);
+}
+
+.plan-card h2 {
+    font-size: 2rem;
+    color: #ffeb3b;
+}
+
+.plan-card p {
+    font-size: 1.2rem;
+    color: white;
+    margin-top: 10px;
+}
+
+/* Form Container */
+.container {
+    background: rgba(255, 255, 255, 0.15);
+    backdrop-filter: blur(10px);
+    padding: 2rem;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+    border-radius: 10px;
+    width: 100%;
+    max-width: 350px;
+    text-align: center;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+/* Form Heading */
+h2 {
+    margin-bottom: 1rem;
+    font-weight: 600;
+}
+
+/* Input Group */
+.input-group {
+    position: relative;
+    margin-bottom: 1rem;
+    width: 100%;
+}
+
+.input-group input, .input-group select {
+    width: 100%;
+    padding: 12px;
+    padding-left: 40px;
+    border: none;
+    border-radius: 5px;
+    background: rgba(255, 255, 255, 0.2);
+    color: white;
+    outline: none;
+    transition: 0.3s;
+}
+
+.input-group input::placeholder {
+    color: #ddd;
+}
+
+/* Input Field Focus Effect */
+.input-group input:focus {
+    background: rgba(255, 255, 255, 0.3);
+}
+
+/* Icons inside Inputs */
+.input-group i {
+    position: absolute;
+    left: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: white;
+}
+
+/* General Buttons */
+.btn {
+    text-decoration: none;
+    background: white;
+    color: black;
+    padding: 12px 20px;
+    border-radius: 8px;
+    font-size: 1.2rem;
+    transition: all 0.3s ease-in-out;
+    border: 2px solid white;
+    cursor: pointer;
+    display: block;
+    width: 100%;
+    font-weight: 600;
+}
+
+.btn:hover {
+    background: transparent;
+    color: white;
+    border: 2px solid white;
+    transform: scale(1.05);
+}
+
+/* Logout Button */
+.logout-btn {
+    margin-top: 20px;
+    background: red;
+    color: white;
+    padding: 12px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    width: 100%;
+}
+
+.logout-btn:hover {
+    background: darkred;
+}
+
+/* Footer */
+footer {
+    margin-top: 20px;
+    font-size: 1rem;
+    opacity: 0.8;
+}
+
+/* Links */
+p {
+    margin-top: 1rem;
+    font-size: 14px;
+}
+
+a {
+    text-decoration: none;
+    color: #ff9800;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+/* Dashboard Styling */
+.dashboard-container {
+    text-align: center;
+    max-width: 600px;
+    width: 90%;
+    background: rgba(255, 255, 255, 0.1);
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0px 4px 10px rgba(255, 255, 255, 0.2);
+}
+
+/* Responsive Design */
+@media (max-width: 500px) {
+    body {
+        padding: 10px;
+    }
+
+    .container {
+        width: 100%;
+    }
+
+    .plan-container {
+        flex-direction: column;
+        align-items: center;
+    }
+}
+
+/* updated buttons */
+/* General Buttons */
+.btn {
+    text-decoration: none;
+    background: white;
+    color: black;
+    padding: 10px 30px; /* Adjusted padding for width & height */
+    border-radius: 8px;
+    font-size: 1rem; /* Reduced font size slightly */
+    transition: all 0.3s ease-in-out;
+    border: 2px solid white;
+    cursor: pointer;
+    display: inline-block; /* Prevents full width */
+    font-weight: 600;
+    text-align: center;
+    min-width: 150px; /* Ensures width */
+}
+
+.btn:hover {
+    background: transparent;
+    color: white;
+    border: 2px solid white;
+    transform: scale(1.05);
+}
+
+/* Auth Buttons (Login/Signup in Header) */
+.auth-buttons .btn {
+    padding: 8px 25px; /* Adjusted for a sleek look */
+    font-size: 1rem;
+    min-width: 120px; /* Ensures proper width */
+}
+
+/* Dashboard Buttons */
+.dashboard-container button {
+    margin: 10px;
+    background: #ff9800;
+    padding: 8px 20px; /* Reduced height */
+    border-radius: 5px;
+    cursor: pointer;
+    transition: 0.3s;
+    font-size: 1rem;
+    min-width: 150px;
+}
+
+.dashboard-container button:hover {
+    background: #e68900;
+    transform: scale(1.05);
+}
+
+/* ================= GENERAL STYLES ================= */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Poppins', sans-serif;
+}
+
+body {
+    background: linear-gradient(to right, #1c1c1c, #333);
+    color: white;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    padding: 20px;
+}
+
+/* ================= HEADER (Glass Effect) ================= */
+header {
+    background: rgba(255, 255, 255, 0.15);
+    backdrop-filter: blur(10px);
+    width: 100%;
+    padding: 15px 0;
+    text-align: center;
+    font-size: 1.8rem;
+    font-weight: bold;
+    border-radius: 10px;
+    box-shadow: 0px 4px 10px rgba(255, 255, 255, 0.2);
+    border: 2px solid rgba(255, 255, 255, 0.2); /* Added border */
+}
+
+/* ================= BUTTONS ================= */
+.btn {
+    text-decoration: none;
+    background: white;
+    color: black;
+    padding: 8px 25px;
+    border-radius: 8px;
+    font-size: 1rem;
+    transition: all 0.3s ease-in-out;
+    border: 2px solid white;
+    cursor: pointer;
+    display: inline-block;
+    font-weight: 600;
+    text-align: center;
+    min-width: 150px;
+}
+
+.btn:hover {
+    background: transparent;
+    color: white;
+    border: 2px solid white;
+    transform: scale(1.05);
+}
+
+.logout-btn {
+    margin-top: 20px;
+    background: red;
+    color: white;
+    padding: 8px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    width: 100%;
+}
+
+.logout-btn:hover {
+    background: darkred;
+}
+
+/* ================= USER MANAGEMENT PAGE ================= */
+.user-container {
+    text-align: center;
+    max-width: 400px;
+    width: 90%;
+    background: rgba(255, 255, 255, 0.1);
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0px 4px 10px rgba(255, 255, 255, 0.2);
+}
+
+.form-container {
+    margin-bottom: 20px;
+}
+
+.form-container input {
+    width: 80%;
+    padding: 10px;
+    border: none;
+    border-radius: 5px;
+    background: rgba(255, 255, 255, 0.2);
+    color: white;
+    outline: none;
+    margin-bottom: 10px;
+}
+
+.form-container input::placeholder {
+    color: #ddd;
+}
+
+/* User List */
+#userList {
+    list-style: none;
+    padding: 0;
+    margin-top: 15px;
+}
+
+#userList li {
+    background: rgba(255, 255, 255, 0.2);
+    padding: 10px;
+    margin: 5px 0;
+    border-radius: 5px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.delete-btn {
+    background: red;
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.delete-btn:hover {
+    background: darkred;
+}
+
+/* ================= DASHBOARD CARDS ================= */
+.card {
+    background: rgba(255, 255, 255, 0.2);
+    padding: 15px;
+    margin: 15px 0;
+    border-radius: 8px;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+    transition: transform 0.3s, background 0.3s;
+}
+
+.card:hover {
+    transform: scale(1.05);
+    background: rgba(255, 255, 255, 0.3);
+}
+/* ================= BILL GENERATION PAGE ================= */
+.bill-container {
+    text-align: center;
+    max-width: 400px;
+    width: 90%;
+    background: rgba(255, 255, 255, 0.1);
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0px 4px 10px rgba(255, 255, 255, 0.2);
+}
+
+.form-container {
+    margin-bottom: 20px;
+}
+
+.form-container label {
+    display: block;
+    text-align: left;
+    margin: 10px 0 5px;
+    font-size: 14px;
+    font-weight: bold;
+}
+
+.form-container input {
+    width: 100%;
+    padding: 10px;
+    border: none;
+    border-radius: 5px;
+    background: rgba(255, 255, 255, 0.2);
+    color: white;
+    outline: none;
+    margin-bottom: 10px;
+}
+
+.form-container input::placeholder {
+    color: #ddd;
+}
+
+/* PDF Generation Button */
+.generate-btn {
+    background: #4CAF50;
+    color: white;
+}
+
+.generate-btn:hover {
+    background: #45a049;
+}
+
+/* Back Button */
+.back-btn {
+    background: #e74c3c;
+    color: white;
+    margin-top: 10px;
+}
+
+.back-btn:hover {
+    background: #c0392b;
+}
+
+/* ===================== BILL GENERATION PAGE ===================== */
+.bill-container {
+    text-align: center;
+    max-width: 400px;
+    width: 90%;
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(15px);
+    padding: 25px;
+    border-radius: 12px;
+    box-shadow: 0px 5px 15px rgba(255, 255, 255, 0.2);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    margin: 50px auto;
+}
+
+/* Form Container */
+.form-container {
+    margin-bottom: 20px;
+}
+
+/* Labels */
+.form-container label {
+    display: block;
+    text-align: left;
+    margin: 10px 0 5px;
+    font-size: 14px;
+    font-weight: bold;
+    color: white;
+}
+
+/* Input Fields */
+.form-container input {
+    width: 100%;
+    padding: 12px;
+    border: none;
+    border-radius: 8px;
+    background: rgba(255, 255, 255, 0.15);
+    color: white;
+    outline: none;
+    margin-bottom: 15px;
+    transition: 0.3s;
+}
+
+/* Input Placeholder Color */
+.form-container input::placeholder {
+    color: rgba(255, 255, 255, 0.6);
+}
+
+/* Input Focus Effect */
+.form-container input:focus {
+    background: rgba(255, 255, 255, 0.25);
+}
+
+/* Generate PDF Button */
+.generate-btn {
+    background: #4CAF50;
+    color: white;
+    font-size: 16px;
+    font-weight: bold;
+    width: 100%;
+    padding: 10px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.generate-btn:hover {
+    background: #45a049;
+    transform: scale(1.05);
+}
+
+/* Back Button */
+.back-btn {
+    background: #e74c3c;
+    color: white;
+    font-size: 16px;
+    font-weight: bold;
+    width: 100%;
+    padding: 10px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: 0.3s;
+    margin-top: 10px;
+}
+
+.back-btn:hover {
+    background: #c0392b;
+    transform: scale(1.05);
+}
+
+/* ===================== USER MANAGEMENT PAGE ===================== */
+.user-container {
+    text-align: center;
+    max-width: 400px;
+    width: 90%;
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(15px);
+    padding: 25px;
+    border-radius: 12px;
+    box-shadow: 0px 5px 15px rgba(255, 255, 255, 0.2);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    margin: 50px auto;
+}
+
+/* Form Container */
+.form-container {
+    margin-bottom: 20px;
+}
+
+/* Input Field */
+.form-container input {
+    width: 100%;
+    padding: 12px;
+    border: none;
+    border-radius: 8px;
+    background: rgba(255, 255, 255, 0.15);
+    color: white;
+    outline: none;
+    margin-bottom: 15px;
+    transition: 0.3s;
+}
+
+/* Placeholder Color */
+.form-container input::placeholder {
+    color: rgba(255, 255, 255, 0.6);
+}
+
+/* Input Focus Effect */
+.form-container input:focus {
+    background: rgba(255, 255, 255, 0.25);
+}
+
+/* Add User Button */
+.add-user-btn {
+    background: #3498db;
+    color: white;
+    font-size: 16px;
+    font-weight: bold;
+    width: 100%;
+    padding: 10px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.add-user-btn:hover {
+    background: #2980b9;
+    transform: scale(1.05);
+}
+
+/* Users List */
+#userList {
+    list-style: none;
+    padding: 0;
+    margin-top: 15px;
+}
+
+#userList li {
+    background: rgba(255, 255, 255, 0.15);
+    padding: 12px;
+    border-radius: 8px;
+    margin-bottom: 10px;
+    color: white;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+/* Delete Button */
+.delete-btn {
+    background: #e74c3c;
+    border: none;
+    color: white;
+    font-size: 14px;
+    padding: 6px 10px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.delete-btn:hover {
+    background: #c0392b;
+    transform: scale(1.05);
+}
+
+/* Back Button */
+.back-btn {
+    background: #e67e22;
+    color: white;
+    font-size: 16px;
+    font-weight: bold;
+    width: 100%;
+    padding: 10px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: 0.3s;
+    margin-top: 10px;
+}
+
+.back-btn:hover {
+    background: #d35400;
+    transform: scale(1.05);
+}
+/* Testimonials Section */
+.testimonials {
+    margin-top: 40px;
+    text-align: center;
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0px 4px 10px rgba(255, 255, 255, 0.2);
+    width: 100%;
+    /* max-width: 100vh; */
+}
+
+/* Testimonial Card */
+.testimonial-card {
+    background: rgba(255, 255, 255, 0.2);
+    padding: 15px;
+    margin: 15px ;
+    border-radius: 8px;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+    transition: transform 0.3s, background 0.3s;
+}
+
+.testimonial-card:hover {
+    transform: scale(1.05);
+    background: rgba(255, 255, 255, 0.3);
+}
+
+/* Quote Text */
+.quote {
+    font-style: italic;
+    font-size: 1rem;
+    color: #fff;
+    opacity: 0.9;
+}
+
+/* Name Styling */
+.testimonial-card h4 {
+    margin-top: 10px;
+    color: #ff9800;
+    font-size: 1.1rem;
+}
+
+/* Welcome Section */
+.welcome-section {
+    text-align: center;
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    padding: 25px;
+    border-radius: 10px;
+    box-shadow: 0px 4px 10px rgba(255, 255, 255, 0.2);
+    width: 90%;
+    max-width: 700px;
+    margin-top: 130px;
+}
+
+/* Headings */
+.welcome-section h1 {
+    font-size: 2rem;
+    color: white;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+    margin-bottom: 10px;
+}
+
+.welcome-section h3 {
+    font-size: 1.3rem;
+    color: #ff9800;
+    margin-bottom: 15px;
+}
+
+/* Features List */
+.welcome-section br {
+    display: block;
+    margin: 10px 0;
+}
+
+.welcome-section h3:last-of-type {
+    font-weight: bold;
+    color: white;
+    margin-top: 20px;
+}
+
+/* Video Background */
+.video-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    z-index: -1;
+}
+
+.video-container video {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 100vw;
+    height: 100vh;
+    object-fit: cover;
+}
+
+/* Ensure body is scrollable */
+body {
+    min-height: 100vh;
+    overflow-y: auto; /* Enables vertical scrolling */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    text-align: center;
+    position: relative;
+}
+
+/* Main Content */
+.content {
+    position: relative;
+    z-index: 1;
+    text-align: center;
+    color: white;
+    backdrop-filter: blur(10px);
+    padding: 50px;
+    border-radius: 10px;
+    box-shadow: 0px 4px 10px rgba(255, 255, 255, 0.2);
+    background: rgba(255, 255, 255, 0.1);
+    max-width: 80%;
+    margin: 50px auto; /* Allows scrolling */
+}
+
+/* Fix Scrollbar */
+html {
+    scroll-behavior: smooth;
+    overflow-x: hidden;
+}
+
+/* Custom Scrollbar Styling */
+::-webkit-scrollbar {
+    width: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: rgba(255, 255, 255, 0.1);
+}
+
+::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.5);
+    border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: rgba(255, 255, 255, 0.8);
+}
+
+/* Ensure scrolling works */
+html, body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    overflow-y: auto;
+}
+
+/* Video Background */
+.signup-video-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -1;
+    overflow: hidden;
+}
+
+.signup-video-container video {
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* Ensures the video fills the entire screen */
+}
+
+/* Centered Signup Form */
+.signup-container {
+    position: relative;
+    width: 400px;
+    margin: 100px auto;
+    padding: 20px;
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(255, 255, 255, 0.2);
+    text-align: center;
+}
+
+/* Form Input Styling */
+.signup-input-group {
+    display: flex;
+    align-items: center;
+    background: rgba(255, 255, 255, 0.2);
+    padding: 10px;
+    margin: 10px 0;
+    border-radius: 5px;
+}
+
+.signup-input-group i {
+    margin-right: 10px;
+    color: white;
+}
+
+.signup-input-group input,
+.signup-input-group select {
+    border: none;
+    background: transparent;
+    outline: none;
+    width: 100%;
+    color: white;
+}
+
+/* Button Styling */
+button {
+    width: 100%;
+    padding: 10px;
+    background: rgba(255, 255, 255, 0.3);
+    border: none;
+    cursor: pointer;
+    font-size: 16px;
+    color: white;
+    margin-top: 10px;
+    border-radius: 5px;
+}
+
+button:hover {
+    background: rgba(255, 255, 255, 0.5);
+}
+
+/* Link Styling */
+p a {
+    color: white;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+p a:hover {
+    text-decoration: underline;
+}
+
+/* Ensure Scrollbar Works */
+body::-webkit-scrollbar {
+    width: 8px;
+}
+
+body::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.5);
+    border-radius: 4px;
+}
+
+body::-webkit-scrollbar-track {
+    background: rgba(0, 0, 0, 0.3);
+}
+

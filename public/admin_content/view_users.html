@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manage Users</title>
+    <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+    <div class="user-container">
+        <h2><i class="fas fa-user-plus"></i> Manage Users</h2>
+        
+        <!-- User Input Form -->
+        <div class="form-container">
+            <input type="text" id="username" placeholder="Enter User Name">
+            <button class="btn add-user-btn" onclick="addUser()">Add User</button>
+        </div>
+
+        <!-- Users List -->
+        <ul id="userList"></ul>
+
+        <!-- Back Button -->
+        <button class="btn back-btn" onclick="goBack()">Back to Dashboard</button>
+    </div>
+
+    <script>
+        // Function to add a new user to local storage
+        function addUser() {
+            let username = document.getElementById("username").value.trim();
+            if (username === "") return alert("Please enter a valid username.");
+
+            let users = JSON.parse(localStorage.getItem("users")) || [];
+            users.push(username);
+            localStorage.setItem("users", JSON.stringify(users));
+
+            displayUsers();
+            document.getElementById("username").value = "";
+        }
+
+        // Function to display users from local storage
+        function displayUsers() {
+            let users = JSON.parse(localStorage.getItem("users")) || [];
+            let userList = document.getElementById("userList");
+
+            userList.innerHTML = ""; // Clear list before reloading
+
+            users.forEach((user, index) => {
+                let li = document.createElement("li");
+                li.innerHTML = `${user} <button class="delete-btn" onclick="deleteUser(${index})">❌</button>`;
+                userList.appendChild(li);
+            });
+        }
+
+        // Function to delete a user from local storage
+        function deleteUser(index) {
+            let users = JSON.parse(localStorage.getItem("users")) || [];
+            users.splice(index, 1);
+            localStorage.setItem("users", JSON.stringify(users));
+
+            displayUsers();
+        }
+
+        // Function to go back to the Admin Dashboard
+        function goBack() {
+            window.location.href = '../admin_dashboard.html';
+        }
+
+        // Load users when page loads
+        window.onload = displayUsers;
+    </script>
+</body>
+</html>

@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Dashboard</title>
+    <link rel="stylesheet" href="./css/style.css">
+</head>
+<body>
+    <div class="dashboard-container">
+        <h2><i class="fas fa-user"></i> User Dashboard</h2>
+        <p>Welcome! Here you can view your membership details and bills.</p>
+
+        <div class="card">
+            <h3><i class="fas fa-dumbbell"></i> My Membership</h3>
+            <p><strong>Package:</strong> Gold Membership</p>
+            <p><strong>Valid Till:</strong> 30th June 2025</p>
+        </div>
+
+        <div class="card">
+            <h3><i class="fas fa-file-invoice"></i> My Bills</h3>
+            <p><strong>Last Bill:</strong> $50 (Paid on 1st March 2025)</p>
+            <button class="btn" onclick="window.location.href='admin_content/generate_bills.html'">View All Bills</button>
+        </div>
+
+        <div class="card">
+            <h3><i class="fas fa-calendar"></i> My Schedule</h3>
+            <p>Next Class: <strong>Yoga</strong> on 20th March at 6 PM</p>
+        </div>
+
+        <button class="logout-btn" onclick="logout()"><i class="fas fa-sign-out-alt"></i> Logout</button>
+    </div>
+
+    <script>
+        function logout() {
+            localStorage.removeItem("token");
+            window.location.href = "login.html";
+        }
+    </script>
+</body>
+</html>
